@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.orangetalents.treinomercadolivre.dto.UsuarioRequest;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/usuario")
 public class UsuarioController {
 	
 	@PersistenceContext
@@ -22,9 +22,9 @@ public class UsuarioController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> criaCliente(@RequestBody @Valid UsuarioRequest clienteRequest){
+	public ResponseEntity<?> criaCliente(@RequestBody @Valid UsuarioRequest usuarioRequest){
 		try {
-			em.persist(clienteRequest.toModel());
+			em.persist(usuarioRequest.toModel());
 			return ResponseEntity.ok().build();
 		}
 		catch(IllegalArgumentException e) {
