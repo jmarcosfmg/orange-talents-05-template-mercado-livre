@@ -11,25 +11,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.orangetalents.treinomercadolivre.dto.UsuarioRequest;
+import com.orangetalents.treinomercadolivre.dto.CategoriaRequest;
 
 @RestController
-@RequestMapping("/usuario")
-public class UsuarioController {
-	
+@RequestMapping("/categoria")
+public class CategoriaController {
+
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> criaCliente(@RequestBody @Valid UsuarioRequest usuarioRequest){
-		try {
-			em.persist(usuarioRequest.toModel());
-			return ResponseEntity.ok().build();
-		}
-		catch(IllegalArgumentException e) {
-			return ResponseEntity.badRequest().build();
-		}
+	public ResponseEntity<?> criaCliente(@RequestBody @Valid CategoriaRequest categoriaRequest) {
+		em.persist(categoriaRequest.toModel(em));
+		return ResponseEntity.ok().build();
 	}
 
 }
