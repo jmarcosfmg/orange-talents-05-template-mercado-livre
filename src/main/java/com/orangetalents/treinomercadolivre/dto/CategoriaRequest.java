@@ -1,15 +1,17 @@
 package com.orangetalents.treinomercadolivre.dto;
 
-import javax.persistence.EntityManager;
+import java.util.Optional;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.util.Assert;
 
 import com.orangetalents.treinomercadolivre.model.Categoria;
+import com.orangetalents.treinomercadolivre.repository.CategoriaRepository;
 import com.orangetalents.treinomercadolivre.validator.Unico;
 
 public class CategoriaRequest {
-	
+
 	@NotBlank
 	@Unico(atributo = "nome", classe = Categoria.class)
 	private String nome;
@@ -28,16 +30,15 @@ public class CategoriaRequest {
 	public String getNome() {
 		return nome;
 	}
-	
-	public Categoria toModel(EntityManager em) {
+
+	public Categoria toModel(CategoriaRepository categoriaRepository) {
 		Categoria novaCategoria = new Categoria(this.nome);
-		if(this.categoriaMae != null) {
-			Categoria mae = em.find(Categoria.class, this.categoriaMae);
-			Assert.isTrue(mae != null, "Categoria mãe não encontrada");
-			novaCategoria.setCategoriaMae(mae);
+		if (this.categoriaMae != null) {
+			Optional<Categoria> mae = categoriaRepository.findById(this.categoriaMae);
+			Assert.isTrue(mae.isPresent(), "Categoria mãe não encontrada");
+			novaCategoria.setCategoriaMae(mae.get());
 		}
 		return novaCategoria;
 	}
-	
-	
+
 }
