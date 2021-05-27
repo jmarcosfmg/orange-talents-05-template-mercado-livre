@@ -24,6 +24,10 @@ public class Categoria {
 	public Categoria(@NotBlank String nome) {
 		this.nome = nome;
 	}
+	
+	public Categoria(Long id) {
+		this.id = id;
+	}
 
 	@Deprecated
 	public Categoria() {
@@ -36,7 +40,7 @@ public class Categoria {
 	public void setCategoriaMae(Categoria categoriaMae) {
 		this.categoriaMae = categoriaMae;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

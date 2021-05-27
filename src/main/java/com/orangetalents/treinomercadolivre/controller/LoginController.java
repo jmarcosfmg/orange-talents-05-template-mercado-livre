@@ -35,7 +35,7 @@ public class LoginController {
 	private Long expiration;
 
 	@PostMapping
-	@RequestMapping("/logins")
+	@RequestMapping("/login")
 	public ResponseEntity<?> criaLogin(@RequestBody @Valid LoginRequest loginRequest) {
 		try {
 		Authentication auth = authenticationManager.authenticate(
