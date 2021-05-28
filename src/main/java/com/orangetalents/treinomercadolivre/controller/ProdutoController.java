@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orangetalents.treinomercadolivre.dto.ImagemRequest;
+import com.orangetalents.treinomercadolivre.dto.OpiniaoProdutoRequest;
 import com.orangetalents.treinomercadolivre.dto.ProdutoRequest;
 import com.orangetalents.treinomercadolivre.model.Categoria;
 import com.orangetalents.treinomercadolivre.model.ImagemProduto;
@@ -51,6 +52,7 @@ public class ProdutoController {
 	@Transactional
 	public ResponseEntity<?> insereImagem(@AuthenticationPrincipal Optional<Usuario> usuario,@PathVariable("id") Long produtoId ,@Valid ImagemRequest request){
 		Produto produto = em.find(Produto.class, produtoId);
+		Assert.isTrue(produto != null, "O produto não existe");
 		if(usuario.isEmpty() || produto.getIdDono() != usuario.get().getId()) return ResponseEntity.status(403).build();
 		Set<ImagemProduto> imagens = new HashSet<>();
 		request.getFile().forEach(file -> {
@@ -58,6 +60,17 @@ public class ProdutoController {
 			imagens.add(new ImagemProduto(produto, link));
 		});
 		imagens.forEach(im -> em.persist(im));
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping
+	@RequestMapping("/{id}/opinioes")
+	@Transactional
+	public ResponseEntity<?> insereOpiniao(@AuthenticationPrincipal Optional<Usuario> usuario,@PathVariable("id") Long produtoId ,@RequestBody @Valid OpiniaoProdutoRequest opiniao){
+		Produto produto = em.find(Produto.class, produtoId);
+		Assert.isTrue(produto != null, "O produto não existe");
+		if(usuario.isEmpty()) return ResponseEntity.status(403).build();
+		em.persist(opiniao.toModel(usuario.get(), produto));
 		return ResponseEntity.ok().build();
 	}
 }
