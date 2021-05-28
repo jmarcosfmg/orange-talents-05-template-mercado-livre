@@ -43,10 +43,6 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				//.antMatchers(HttpMethod.GET, "/categoria").permitAll()
-				//.antMatchers(HttpMethod.POST, "/usuario").permitAll()
-				//.antMatchers(HttpMethod.POST, "/login").permitAll()
-				//.antMatchers(HttpMethod.POST, "/produto/**").permitAll()
 				.anyRequest().authenticated().and().csrf().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
