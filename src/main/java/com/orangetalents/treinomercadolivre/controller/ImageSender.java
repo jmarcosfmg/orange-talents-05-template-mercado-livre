@@ -4,11 +4,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
-public class ImageUploader {
+public class ImageSender {
 	
 	private String connection;
 	
-	public ImageUploader() {
+	public ImageSender() {
 		this.connection = "https://www.imageserver.com/product/";
 	}
 	
