@@ -6,12 +6,13 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -40,9 +41,9 @@ public class Usuario implements UserDetails {
 	@NotBlank
 	private String senha;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Perfil> perfil = new ArrayList<>();
-
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<TipoPerfil> perfil = new ArrayList<>();
+	
 	public Usuario(@Email @NotBlank String login, @NotBlank String senha) {
 		this.login = login;
 		this.senha = new BCryptPasswordEncoder().encode(senha);

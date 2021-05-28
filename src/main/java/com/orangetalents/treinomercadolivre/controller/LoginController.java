@@ -44,7 +44,7 @@ public class LoginController {
 		Date instante = new Date();
 		Date expiracao = new Date(instante.getTime() + expiration);
 		return ResponseEntity.ok()
-				.body(Jwts.builder().setIssuer("mercadolivreapplication").setSubject(user.getId().toString())
+				.body(Jwts.builder().setIssuer("mercadolivreapplication").setSubject(user.getUsername())
 						.setIssuedAt(instante).setExpiration(expiracao).signWith(SignatureAlgorithm.HS512, this.secret)
 						.compact());
 		}

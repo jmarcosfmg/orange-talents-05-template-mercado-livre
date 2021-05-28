@@ -15,10 +15,11 @@ import org.springframework.util.Assert;
 import com.orangetalents.treinomercadolivre.model.Caracteristica;
 import com.orangetalents.treinomercadolivre.model.Categoria;
 import com.orangetalents.treinomercadolivre.model.Produto;
+import com.orangetalents.treinomercadolivre.model.Usuario;
 import com.orangetalents.treinomercadolivre.validator.CampoVerificado;
 
 public class ProdutoRequest {
-	
+
 	@NotBlank
 	private String nome;
 	@NotNull
@@ -30,7 +31,7 @@ public class ProdutoRequest {
 	@NotBlank
 	@Size(max = 1000)
 	private String descricao;
-	
+
 	@NotNull
 	@Size(min = 3)
 	private List<CaracteristicaRequest> caracteristicas;
@@ -74,16 +75,15 @@ public class ProdutoRequest {
 	public Long getCategoria() {
 		return categoria;
 	}
-	
-	public Produto toModel() {
-		Assert.isTrue(caracteristicas.size() >=3, "O produto deve possuir no mínimo 3 características");
+
+	public Produto toModel(Categoria cat, Usuario user) {
+		Assert.isTrue(caracteristicas.size() >= 3, "O produto deve possuir no mínimo 3 características");
 		Assert.isTrue(categoria != null, "A categoria não pode ser nula");
 		Assert.isTrue(!descricao.isBlank(), "Insira uma descrição");
-		
-		List<Caracteristica> caracteristicasModel = this.caracteristicas.stream().map(c -> 
-		c.toModel()).collect(Collectors.toList());
-		Produto produto = new Produto(nome, valor, quantidade, descricao, caracteristicasModel, 
-						new Categoria(this.categoria));
+
+		List<Caracteristica> caracteristicasModel = this.caracteristicas.stream().map(c -> c.toModel())
+				.collect(Collectors.toList());
+		Produto produto = new Produto(nome, valor, quantidade, descricao, caracteristicasModel, cat, user);
 		caracteristicasModel.forEach(c -> c.setProduto(produto));
 		return produto;
 	}

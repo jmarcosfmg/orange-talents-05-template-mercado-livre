@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Produto {
@@ -40,15 +42,23 @@ public class Produto {
 	private LocalDateTime instanteDeCadastro;
 	@NotNull
 	@Size(min = 3)
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "produto", orphanRemoval = true, cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "produto", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Caracteristica> caracteristicas;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "produto", orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<ImagemProduto> imagens;
 
 	@ManyToOne
 	private Categoria categoria;
+	
+	@ManyToOne
+	private Usuario dono;
 
 	public Produto(@NotBlank String nome, @NotNull @Positive BigDecimal valor,
 			@NotNull @PositiveOrZero Integer quantidade, @NotBlank @Size(max = 1000) String descricao,
-			@NotNull @Size(min = 3) List<Caracteristica> caracteristicas, Categoria categoria) {
+			@NotNull @Size(min = 3) List<Caracteristica> caracteristicas, Categoria categoria, Usuario usuario) {
 		this.nome = nome;
 		this.valor = valor;
 		this.quantidade = quantidade;
@@ -56,6 +66,12 @@ public class Produto {
 		this.instanteDeCadastro = LocalDateTime.now();
 		this.caracteristicas = caracteristicas;
 		this.categoria = categoria;
+		this.dono = usuario;
+	}
+	
+	@Deprecated
+	public Produto() {
+		
 	}
 
 	public Long getId() {
@@ -88,5 +104,21 @@ public class Produto {
 
 	public Categoria getCategoria() {
 		return categoria;
+	}
+	
+	public Usuario getDono() {
+		return this.dono;
+	}
+	
+	public Long getIdDono() {
+		return this.dono.getId();
+	}
+
+	public List<ImagemProduto> getImagens() {
+		return imagens;
+	}
+
+	public void setImagens(List<ImagemProduto> imagens) {
+		this.imagens = imagens;
 	}
 }

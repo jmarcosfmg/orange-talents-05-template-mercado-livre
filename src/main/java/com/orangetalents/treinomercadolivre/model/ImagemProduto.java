@@ -5,10 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Caracteristica {
+public class ImagemProduto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,23 +16,26 @@ public class Caracteristica {
 	@ManyToOne
 	private Produto produto;
 
-	@NotBlank
-	private String nome;
+	private String link;
 
-	@NotBlank
-	private String valor;
-
-	public Caracteristica(@NotBlank String nome, @NotBlank String valor) {
-		this.nome = nome;
-		this.valor = valor;
+	public ImagemProduto(Produto produto, String link) {
+		this.produto = produto;
+		this.link = link;
 	}
-	
+
 	@Deprecated
-	public Caracteristica() {
+	public ImagemProduto() {
 	}
 
+	public Long getId() {
+		return id;
+	}
 
-	public void setProduto(Produto p) {
-		this.produto = p;
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public String getLink() {
+		return link;
 	}
 }
