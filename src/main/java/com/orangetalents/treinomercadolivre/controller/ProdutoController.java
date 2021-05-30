@@ -10,12 +10,14 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orangetalents.treinomercadolivre.dto.DetalhesProdutoResponse;
 import com.orangetalents.treinomercadolivre.dto.OpiniaoProdutoRequest;
 import com.orangetalents.treinomercadolivre.dto.ProdutoRequest;
 import com.orangetalents.treinomercadolivre.model.Categoria;
@@ -52,5 +54,15 @@ public class ProdutoController {
 			return ResponseEntity.status(403).build();
 		em.persist(opiniao.toModel(usuario.get(), produto));
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping
+	@RequestMapping("/{id}/detalhes")
+	@Transactional
+	public ResponseEntity<DetalhesProdutoResponse> buscaDetalhes(@PathVariable("id") Long produtoId) {
+		Produto produto = em.find(Produto.class, produtoId);
+		Assert.isTrue(produto != null, "O produto não existe");
+		DetalhesProdutoResponse detalhes = new DetalhesProdutoResponse(produto);
+		return ResponseEntity.ok().body(detalhes);
 	}
 }

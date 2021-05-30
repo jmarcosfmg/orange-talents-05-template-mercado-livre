@@ -32,8 +32,15 @@ public class Caracteristica {
 	public Caracteristica() {
 	}
 
-
 	public void setProduto(Produto p) {
 		this.produto = p;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getValor() {
+		return valor;
 	}
 }
